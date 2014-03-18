@@ -85,6 +85,7 @@ public class Inspector {
 			if (!(modfs.equals("")))
 				System.out.print(modfs + " ");
 			System.out.println(fieldType + " " + fieldName + " " + "=" + " " +fields[j].get(object));
+			
 
 		}
 		Class<?> cl = c.getSuperclass();
