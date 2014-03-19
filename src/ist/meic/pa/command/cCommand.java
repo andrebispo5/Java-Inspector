@@ -25,7 +25,7 @@ public class cCommand implements Command {
 		classArgs = new Class<?>[numArgs];
 		args= new Object[numArgs];
 		try {
-			computeAllArgs(argList);
+			computeAllArgs(argList, nav);
 			Method method = getMethod(commandList, c);
 			if(method != null)
 				System.err.println(method.invoke(obj, args));
@@ -75,7 +75,7 @@ public class cCommand implements Command {
 	}
 	
 	
-	private void computeAllArgs(String[] argArray) throws InstantiationException, IllegalAccessException, ClassNotFoundException, IllegalArgumentException, SecurityException, InvocationTargetException, NoSuchMethodException{
+	private void computeAllArgs(String[] argArray, Navigator nav) throws InstantiationException, IllegalAccessException, ClassNotFoundException, IllegalArgumentException, SecurityException, InvocationTargetException, NoSuchMethodException{
 		for (int i=0;i<argArray.length;i++){
 			if(argArray[i].startsWith("\"")){
 				classArgs[i]=String.class;
@@ -95,6 +95,22 @@ public class cCommand implements Command {
 			else if(argArray[i].matches("[0-9]+L")){
 				classArgs[i]=long.class;
 				args[i] = Long.parseLong(argArray[i].substring(0,argArray[i].length() -1));
+			}
+			else if(argArray[i].startsWith("@")){
+				Object newObj = nav.getSavedObject(argArray[i]);
+				Class<?> c = newObj.getClass();
+				if(c.isPrimitive()){
+					try {
+						c = (Class<?>) c.getField("TYPE").get(null);
+					} catch (NoSuchFieldException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				classArgs[i]= newObj.getClass();
+				System.out.println(classArgs[i]);
+				args[i] =newObj;
+				System.out.println(args[i]);
 			}
 		}
 	}

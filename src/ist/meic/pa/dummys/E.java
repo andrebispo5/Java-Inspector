@@ -17,7 +17,7 @@ public class E extends B {
 		return f;
 	}
 
-	public void setF(boolean f) {
+	public void setF(Boolean f) {
 		this.f = f;
 	}
 

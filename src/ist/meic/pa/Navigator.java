@@ -40,7 +40,7 @@ public class Navigator {
 	
 	public void saveObject(String name){
 		Object obj = getObject();
-		savedObjects.put(name,obj);
+		savedObjects.put("@"+name,obj);
 	}
 	
 	public void printGraph(){
@@ -60,6 +60,10 @@ public class Navigator {
 	public int maxOption() {
 		int size = objectArray.size();
 		return size;
+	}
+	
+	public Object getSavedObject(String name){
+		return savedObjects.get(name);
 	}
 }
 	
