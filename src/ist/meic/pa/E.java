@@ -8,6 +8,10 @@ public class E extends B {
 		return getD()+h;
 	}
 	
+	public int j(boolean b){
+		return 1;
+	}
+	
 	public static long i =10L;
 	
 }
