@@ -30,4 +30,26 @@ public class TypeValidator {
 		
 		return retVal;
 	}
+	
+	public boolean isPrimitive(Class <?> c){
+		String name = c.getName();
+		if(name.contains("Integer")){
+			return true;
+		}else if(name.contains("Boolean")){
+			return true;
+		}else if(name.contains("Double")){
+			return true;
+		}else if(name.contains("Short")){
+			return true;
+		}else if(name.contains("Byte")){
+			return true;
+		}else if(name.contains("Long")){
+			return true;
+		}else if(name.contains("Float")){
+			return true;
+		}else{
+			System.err.println("Incompatible type to assign field!");
+		}
+		return false;
+	}
 }

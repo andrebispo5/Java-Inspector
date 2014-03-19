@@ -17,7 +17,7 @@ public class Navigator {
 	public void add(Object obj){
 		
 		objectArray.add(obj);
-		currentPosition+=1;
+		currentPosition=objectArray.size()-1;
 	}
 	
 	public void goTo(int dest){
@@ -40,7 +40,7 @@ public class Navigator {
 	
 	public void saveObject(String name){
 		Object obj = getObject();
-		savedObjects.put("@"+name,obj);
+		savedObjects.put(name,obj);
 	}
 	
 	public void printGraph(){

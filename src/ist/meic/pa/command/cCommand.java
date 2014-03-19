@@ -2,6 +2,7 @@ package ist.meic.pa.command;
 
 import ist.meic.pa.Inspector;
 import ist.meic.pa.Navigator;
+import ist.meic.pa.TypeValidator;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -97,20 +98,18 @@ public class cCommand implements Command {
 				args[i] = Long.parseLong(argArray[i].substring(0,argArray[i].length() -1));
 			}
 			else if(argArray[i].startsWith("@")){
-				Object newObj = nav.getSavedObject(argArray[i]);
+				Object newObj = nav.getSavedObject(argArray[i].substring(1,argArray[i].length()));
 				Class<?> c = newObj.getClass();
-				if(c.isPrimitive()){
+				TypeValidator tv = new TypeValidator();
+				if(tv.isPrimitive(c)){
 					try {
 						c = (Class<?>) c.getField("TYPE").get(null);
 					} catch (NoSuchFieldException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
-				classArgs[i]= newObj.getClass();
-				System.out.println(classArgs[i]);
+				classArgs[i]= c;
 				args[i] =newObj;
-				System.out.println(args[i]);
 			}
 		}
 	}
