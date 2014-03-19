@@ -25,7 +25,7 @@ public class TypeValidator {
 		}else if(name.contains("String")){
 			retVal = val;
 		}else{
-			System.err.println("Incompatible type to assign field!");
+			System.err.println("Incompatible type to assign field! ");
 		}
 		
 		return retVal;
