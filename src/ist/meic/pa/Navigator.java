@@ -30,12 +30,14 @@ public class Navigator {
 	}
 		
 	public Object next(){
-		currentPosition+=1;
+		if(currentPosition < objectArray.size()-1)
+			currentPosition+=1;
 		return objectArray.get(currentPosition);
 	}
 	
 	public Object previous(){
-		currentPosition-=1;
+		if(currentPosition > 0)
+			currentPosition-=1;
 		return objectArray.get(currentPosition);
 	}
 	
