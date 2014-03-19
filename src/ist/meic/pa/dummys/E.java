@@ -1,8 +1,9 @@
-package ist.meic.pa;
+package ist.meic.pa.dummys;
+
 
 public class E extends B {
 
-	boolean f;
+	private boolean f;
 	
 	public int g(int h){
 		return getD()+h;
@@ -12,6 +13,14 @@ public class E extends B {
 		return 1;
 	}
 	
+	public boolean getF() {
+		return f;
+	}
+
+	public void setF(boolean f) {
+		this.f = f;
+	}
+
 	public static long i =10L;
 	
 }

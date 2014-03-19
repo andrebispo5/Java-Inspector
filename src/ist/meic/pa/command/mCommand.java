@@ -1,4 +1,8 @@
-package ist.meic.pa;
+package ist.meic.pa.command;
+
+import ist.meic.pa.Inspector;
+import ist.meic.pa.Navigator;
+import ist.meic.pa.TypeValidator;
 
 import java.lang.reflect.Field;
 
@@ -12,13 +16,9 @@ public class mCommand implements Command {
 		Field f = null;
 		try {
 			f = this.getField(obj, c, commandList[1]);
-			if(f==null){
-				System.err.println("Field of object"+ obj +"not found");
-			}else{
-				TypeValidator t = new TypeValidator();
-				Object value = t.assignValue(f, commandList[2]);
-				f.set(obj, value);
-			}
+			TypeValidator t = new TypeValidator();
+			Object value = t.assignValue(f, commandList[2]);
+			f.set(obj, value);
 		} catch (SecurityException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -31,6 +31,10 @@ public class mCommand implements Command {
 		} catch (IllegalAccessException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch(NullPointerException e){
+			System.err.println("Field not found. Try again.");
+		} catch(ArrayIndexOutOfBoundsException e){
+			System.err.println("Value to assign to field not found. Try again.");
 		}
 		
 	}

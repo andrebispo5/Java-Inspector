@@ -1,4 +1,7 @@
-package ist.meic.pa;
+package ist.meic.pa.command;
+
+import ist.meic.pa.Inspector;
+import ist.meic.pa.Navigator;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -24,7 +27,10 @@ public class cCommand implements Command {
 		try {
 			computeAllArgs(argList);
 			Method method = getMethod(commandList, c);
-			System.err.println(method.invoke(obj, args));
+			if(method != null)
+				System.err.println(method.invoke(obj, args));
+			else
+				System.err.println("Method not found. try again.");
 			
 		} catch (InstantiationException e) {
 			// TODO Auto-generated catch block
@@ -57,13 +63,14 @@ public class cCommand implements Command {
 			throws NoSuchMethodException {
 		Method meth=null;
 		try{
-		meth = c.getMethod(commandList[1],classArgs);
+			meth = c.getMethod(commandList[1],classArgs);
 		}
 		catch(NoSuchMethodException e){
-			System.out.println("NOT FOUND");
+			System.err.println("Method not found in class:" + c + " searching superclass.");
 		}
-		if (meth==null)
-			meth = getMethod(commandList, c.getSuperclass());
+		Class <?> sc = c.getSuperclass();
+		if (meth==null && sc != null)
+			meth = getMethod(commandList, sc);
 		return meth;
 	}
 	

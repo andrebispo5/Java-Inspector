@@ -1,4 +1,7 @@
-package ist.meic.pa;
+package ist.meic.pa.command;
+
+import ist.meic.pa.Inspector;
+import ist.meic.pa.Navigator;
 
 public class saveCommand implements Command {
 

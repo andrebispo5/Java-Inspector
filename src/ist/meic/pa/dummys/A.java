@@ -1,4 +1,4 @@
-package ist.meic.pa;
+package ist.meic.pa.dummys;
 
 public class A {
 

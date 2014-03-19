@@ -1,4 +1,7 @@
-package ist.meic.pa;
+package ist.meic.pa.command;
+
+import ist.meic.pa.Inspector;
+import ist.meic.pa.Navigator;
 
 import java.lang.reflect.Field;
 
@@ -26,6 +29,10 @@ public class iCommand implements Command {
 			} catch (IllegalAccessException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			}catch (NullPointerException e) {
+				System.err.println("Field not found. Try again.");
+			}catch (ArrayIndexOutOfBoundsException e) {
+				System.err.println("Field to inspect not found. Insert a field to inspect.");
 			}
 		}
 

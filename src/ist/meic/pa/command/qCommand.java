@@ -1,4 +1,6 @@
-package ist.meic.pa;
+package ist.meic.pa.command;
+
+import ist.meic.pa.Inspector;
 
 public class qCommand implements Command {
 

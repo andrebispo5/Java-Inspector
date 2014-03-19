@@ -1,4 +1,5 @@
-package ist.meic.pa;
+package ist.meic.pa.dummys;
+
 
 public class B extends A {
 

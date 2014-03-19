@@ -45,7 +45,9 @@ public class Navigator {
 	
 	public void printGraph(){
 		for(int i=0;i<objectArray.size();i++){
-			System.err.println("[" + i + "]" + objectArray.get(i));
+			Object obj = objectArray.get(i);
+			String cName = obj.getClass().getSimpleName();
+			System.err.println("[" + i + "] Object «" + cName +"» value «"+ obj+"»");
 		}
 	}
 	
@@ -53,6 +55,11 @@ public class Navigator {
 		for ( String key : savedObjects.keySet() ) {
 			System.err.println("@" + key);
 		}
+	}
+
+	public int maxOption() {
+		int size = objectArray.size();
+		return size;
 	}
 }
 	

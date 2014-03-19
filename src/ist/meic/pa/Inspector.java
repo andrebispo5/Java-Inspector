@@ -1,5 +1,7 @@
 package ist.meic.pa;
 
+import ist.meic.pa.command.Command;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -16,30 +18,21 @@ public class Inspector {
 	}
 	
 	
-	
-	public void inspect(Object object) throws IllegalArgumentException, IllegalAccessException{
-
-		System.out.println("Welcome to the most advanced shell in the world. Enjoy!");
-		System.out.println("-------------------------------------------------------");
-		System.out.println("");
+	public void inspect(Object object){
+		printWelcomeMsg();
 		inspectObject(object);
 		listenConsole();
 	}
+
 	
 	public void inspectObject(Object object){
-		try {
 			navigator.add(object);
 			Class<? extends Object> c = object.getClass();
-			System.out.println(object.toString() + " is an instance of class "  + c.getName() );
-			System.out.println("\n-----FIELDS-----");
+			System.err.println(object.toString() + " is an instance of class "  + c.getName() );
+			System.err.println("\n-----FIELDS-----");
 			printFields(object, c);
-			System.out.println("\n-----METHODS-----");
+			System.err.println("\n-----METHODS-----");
 			printMethods(object, c);
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 	}
 
 	private void listenConsole() {
@@ -47,31 +40,27 @@ public class Inspector {
 		String[] commandSplit = null;
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 		while(running){
-			System.out.print(">");
+			System.err.print(">");
 			try {
 				command = in.readLine();
 				commandSplit = command.split(" ");
-				Class<? extends Command> cmd = Class.forName("ist.meic.pa." + commandSplit[0] + "Command").asSubclass(Command.class);
+				Class<? extends Command> cmd = Class.forName("ist.meic.pa.command." + commandSplit[0] + "Command").asSubclass(Command.class);
 				cmd.newInstance().execute(this, commandSplit);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.err.println("Command not found. Try again or enter h for help.");
 			} catch (InstantiationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.err.println("Command not found. Try again or enter h for help.");			
 			} catch (IllegalAccessException e) {
-				// TODO Auto-generated catch block 
-				e.printStackTrace();
+				System.err.println("Command not found. Try again or enter h for help.");
 			}
 		}
 		
 	}
 
-	private void printFields(Object object, Class<? extends Object> c)
-			throws IllegalAccessException {
+	private void printFields(Object object, Class<? extends Object> c){
 		Field[] fields = c.getDeclaredFields();
 		for (int j=0;j<fields.length;j++){
 			fields[j].setAccessible(true);
@@ -84,22 +73,27 @@ public class Inspector {
 			else
 				fieldType=type.getName();
 			if (!(modfs.equals("")))
-				System.out.print(modfs + " ");
-			System.out.println(fieldType + " " + fieldName + " " + "=" + " " +fields[j].get(object));
-			
-
+				System.err.print(modfs + " ");
+			try {
+				System.err.println(fieldType + " " + fieldName + " " + "=" + " " +fields[j].get(object));
+			} catch (IllegalArgumentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		Class<?> cl = c.getSuperclass();
 		if(cl != null)
 			printFields(object, cl);
 	}
 	
-	protected void quit(){
+	public void quit(){
 		running=false;
 	}
 	
-	private void printMethods(Object object, Class<? extends Object> c)
-			throws IllegalAccessException {
+	private void printMethods(Object object, Class<? extends Object> c){
 		Method[] meth = c.getDeclaredMethods();
 		for (int j=0;j<meth.length;j++){
 			meth[j].setAccessible(true);
@@ -122,8 +116,8 @@ public class Inspector {
 					parameters +=", ";
 			}
 			if (!(modfs.equals("")))
-				System.out.print(modfs + " ");
-			System.out.println(methReturnType + " " + methodName + "(" + " " + parameters + " );"); 
+				System.err.print(modfs + " ");
+			System.err.println(methReturnType + " " + methodName + "(" + " " + parameters + " );"); 
 
 		}
 		Class<?> cl = c.getSuperclass();
@@ -137,4 +131,9 @@ public class Inspector {
 		return this.navigator;
 	}
 
+	private void printWelcomeMsg() {
+		System.err.println("Welcome to the most advanced shell in the world. Enjoy!");
+		System.err.println("-------------------------------------------------------");
+		System.err.println("");
+	}
 }
