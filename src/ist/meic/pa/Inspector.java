@@ -35,11 +35,17 @@ public class Inspector {
 			printMethods(object, c);
 	}
 
+	private void printNavigation() {
+		navigator.printNavigationBar();
+	}
+
+
 	private void listenConsole() {
 		String command = null;
 		String[] commandSplit = null;
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 		while(running){
+			printNavigation();
 			System.err.print(">");
 			try {
 				command = in.readLine();

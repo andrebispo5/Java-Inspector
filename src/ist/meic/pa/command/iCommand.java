@@ -17,7 +17,7 @@ public class iCommand implements Command {
 	
 	public iCommand() {
 		this.fieldsList = new ArrayList<Field>();
-		this.options = new String("Found shadowed field! \n\tCHOOSE YOUR DESTINY: #MortalKombat\n");
+		this.options = new String("Found shadowed field! Choose a class to retreive:\n");
 	}
 
 	
@@ -42,24 +42,19 @@ public class iCommand implements Command {
 				}
 				gadget.inspectObject(field.get(current));
 			} catch (SecurityException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (NoSuchFieldException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IllegalArgumentException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} catch (NullPointerException e) {
-				System.err.println("Field not found. Try again.");
-			}catch (ArrayIndexOutOfBoundsException e) {
-				System.err.println("Field to inspect not found. Insert a field to inspect.");
+			} catch (ArrayIndexOutOfBoundsException e) {
+				System.err.println("Insert a field to inspect.");
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IllegalAccessException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
+			} catch(IndexOutOfBoundsException e){
+				System.err.println("Field not found. Try again.");
 			}
 			
 		}
@@ -70,7 +65,7 @@ public class iCommand implements Command {
 			fields[j].setAccessible(true);
 			String fn = fields[j].getName();
 			if (fn.equals(fieldName)){
-				options+="\t[" + fieldsList.size() + "] " + objClass.getSimpleName() +"\n";
+				options+="[" + fieldsList.size() + "] " + objClass.getSimpleName() +"\n";
 				fieldsList.add(fields[j]);
 			}
 		}

@@ -15,9 +15,14 @@ public class Navigator {
 	}
 	
 	public void add(Object obj){
-		
-		objectArray.add(obj);
-		currentPosition=objectArray.size()-1;
+		if(!objectArray.contains(obj)){
+			objectArray.add(obj);
+			currentPosition=objectArray.size()-1;
+		}else{
+			int objPos = objectArray.indexOf(obj);
+			objectArray.set(objPos, obj);
+			currentPosition=objPos;
+		}
 	}
 	
 	public void goTo(int dest){
@@ -64,6 +69,22 @@ public class Navigator {
 	
 	public Object getSavedObject(String name){
 		return savedObjects.get(name);
+	}
+	
+	public void printNavigationBar(){
+		System.err.println(" ");
+		System.err.println("« « « Navigation Bar » » »");
+		for(Object o : objectArray){
+			String cName = o.getClass().getSimpleName();
+			String value = o.toString();; 
+			if(value.contains(o.getClass().getPackage().getName()))
+				value = value.substring(o.getClass().getPackage().getName().length()+1, value.length());
+			if(objectArray.indexOf(o) == currentPosition)
+				System.err.print("[X]" + cName + "=" + value + "   " );
+			else
+				System.err.print("["+ objectArray.indexOf(o)+"]"+ cName + "=" + value + "   " );
+		}
+		System.err.println("");
 	}
 }
 	
