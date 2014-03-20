@@ -32,31 +32,21 @@ public class cCommand implements Command {
 				System.err.println(method.invoke(obj, args));
 			else
 				System.err.println("Method not found. try again.");
-			
 		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.println("Method not found.");
 		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.println("Method not found.");
 		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.println("Method not found.");
 		} catch (NoSuchMethodException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.println("Method not found.");
 		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.println("Method not found.");
 		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.println("Method not found.");
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.println("Method not found.");
 		}
-		
-
 	}
 
 

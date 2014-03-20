@@ -42,23 +42,23 @@ public class iCommand implements Command {
 				}
 				gadget.inspectObject(field.get(current));
 			} catch (SecurityException e) {
-				e.printStackTrace();
+				System.err.println("Field cannot be accessed");
 			} catch (NullPointerException e) {
 				System.err.println("Insert a valid option number.");
 			} catch (NumberFormatException e) {
 				System.err.println("Insert a valid option number.");
 			} catch (NoSuchFieldException e) {
-				e.printStackTrace();
+				System.err.println("Field not found.");
 			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
+				System.err.println("Insert a valid option number.");
 			} catch (ArrayIndexOutOfBoundsException e) {
 				System.err.println("Insert a field to inspect.");
 			} catch (IOException e) {
 				System.err.println("Insert a valid number.");
 			} catch (IllegalAccessException e) {
-				e.printStackTrace();
+				System.err.println("Field cannot be accessed");
 			} catch(IndexOutOfBoundsException e){
-				System.err.println("Field not found. Try again.");
+				System.err.println("Field not found.");
 			}
 			
 		}

@@ -30,12 +30,11 @@ public class gCommand implements Command {
 			if(0 <= option && option < nav.maxOption())
 				nav.goTo(option);
 			else
-				System.err.println("Invalid object number. Try again.");
+				System.err.println("Invalid object number.");
 		} catch (NumberFormatException e) {
-			System.err.println("Invalid object number. Try again.");
+			System.err.println("Invalid object number.");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.println("Invalid input.");
 		}
 	}
 

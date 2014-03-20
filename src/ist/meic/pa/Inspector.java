@@ -53,8 +53,7 @@ public class Inspector {
 				Class<? extends Command> cmd = Class.forName("ist.meic.pa.command." + commandSplit[0] + "Command").asSubclass(Command.class);
 				cmd.newInstance().execute(this, commandSplit);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.err.println("Input not working properly please restart.");
 			} catch (ClassNotFoundException e) {
 				System.err.println("Command not found. Try again or enter h for help.");
 			} catch (InstantiationException e) {
@@ -83,11 +82,9 @@ public class Inspector {
 			try {
 				System.err.println(fieldType + " " + fieldName + " " + "=" + " " +fields[j].get(object));
 			} catch (IllegalArgumentException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.err.println("Field cannot be accessed.");
 			} catch (IllegalAccessException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.err.println("Field cannot be accessed.");
 			}
 		}
 		Class<?> cl = c.getSuperclass();
