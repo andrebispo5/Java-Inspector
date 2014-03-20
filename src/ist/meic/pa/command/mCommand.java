@@ -20,26 +20,20 @@ public class mCommand implements Command {
 			Object value = t.assignValue(f, commandList[2]);
 			f.set(obj, value);
 		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchFieldException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.println("Field cannot be accessed.");
 		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.println("Field not compatible with input.");
 		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.println("Field cannot be accessed.");
 		} catch(NullPointerException e){
-			System.err.println("Field not found. Try again.");
+			System.err.println("Field not found.");
 		} catch(ArrayIndexOutOfBoundsException e){
-			System.err.println("Value to assign to field not found. Try again.");
+			System.err.println("Value to assign to field not found.");
 		}
 		
 	}
 	
-	public Field getField(Object obj, Class<?> objClass, String fieldName) throws SecurityException, NoSuchFieldException{
+	public Field getField(Object obj, Class<?> objClass, String fieldName){
 		Field[] fields = objClass.getDeclaredFields();
 		Field wantedField = null;
 		for (int j=0;j<fields.length;j++){

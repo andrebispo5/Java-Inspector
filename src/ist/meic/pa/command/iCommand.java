@@ -38,11 +38,15 @@ public class iCommand implements Command {
 					if(option>=0 && option<fieldsList.size())
 						field = fieldsList.get(option);
 					else
-						System.err.println("Invalid object number. Try again.");
+						throw new NumberFormatException();
 				}
 				gadget.inspectObject(field.get(current));
 			} catch (SecurityException e) {
 				e.printStackTrace();
+			} catch (NullPointerException e) {
+				System.err.println("Insert a valid option number.");
+			} catch (NumberFormatException e) {
+				System.err.println("Insert a valid option number.");
 			} catch (NoSuchFieldException e) {
 				e.printStackTrace();
 			} catch (IllegalArgumentException e) {
@@ -50,7 +54,7 @@ public class iCommand implements Command {
 			} catch (ArrayIndexOutOfBoundsException e) {
 				System.err.println("Insert a field to inspect.");
 			} catch (IOException e) {
-				e.printStackTrace();
+				System.err.println("Insert a valid number.");
 			} catch (IllegalAccessException e) {
 				e.printStackTrace();
 			} catch(IndexOutOfBoundsException e){

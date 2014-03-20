@@ -9,19 +9,46 @@ public class TypeValidator {
 		Object retVal = null;
 		String name = type.getName();
 		if(name.contains("int")){
-			retVal = Integer.parseInt(val);
+			try {
+				retVal = Integer.parseInt(val);
+			} catch (NumberFormatException e) {
+				System.err.println("Insert an integer value.");
+			}
 		}else if(name.contains("boolean")){
-			retVal = Boolean.parseBoolean(val);
+			if(val.equals("true")||val.equals("false"))
+				retVal = Boolean.parseBoolean(val);
+			else
+				System.err.println("Insert a boolean value.");
 		}else if(name.contains("double")){
-			retVal = Double.parseDouble(val);
+			try {
+				retVal = Double.parseDouble(val);
+			} catch (NumberFormatException e) {
+				System.err.println("Insert an double value.");
+			}
 		}else if(name.contains("short")){
-			retVal = Short.parseShort(val);
+			try {
+				retVal = Short.parseShort(val);
+			} catch (NumberFormatException e) {
+				System.err.println("Insert an short value.");
+			}
 		}else if(name.contains("byte")){
-			retVal = Byte.parseByte(val);
+			try {
+				retVal = Byte.parseByte(val);
+			} catch (NumberFormatException e) {
+				System.err.println("Insert an byte value.");
+			}
 		}else if(name.contains("long")){
-			retVal = Long.parseLong(val);
+			try {
+				retVal = Long.parseLong(val);
+			} catch (NumberFormatException e) {
+				System.err.println("Insert an long value.");
+			}
 		}else if(name.contains("float")){
-			retVal = Float.parseFloat(val);
+			try {
+				retVal = Float.parseFloat(val);
+			} catch (NumberFormatException e) {
+				System.err.println("Insert an float value.");
+			}
 		}else if(name.contains("String")){
 			retVal = val;
 		}else{
