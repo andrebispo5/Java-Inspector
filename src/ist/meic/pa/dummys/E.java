@@ -4,6 +4,7 @@ package ist.meic.pa.dummys;
 public class E extends B {
 
 	private boolean f;
+	private int[] x = {1,2,3,4};
 	
 	public int g(int h){
 		return getD()+h;

@@ -17,8 +17,9 @@ public class mCommand implements Command {
 		try {
 			f = this.getField(obj, c, commandList[1]);
 			TypeValidator t = new TypeValidator();
-			Object value = t.assignValue(f, commandList[2]);
-			f.set(obj, value);
+			Object fieldValue = t.assignValue(f, commandList[2]);
+			nav.updateExistingObject(fieldValue);
+			f.set(obj, fieldValue);
 		} catch (SecurityException e) {
 			System.err.println("Field cannot be accessed.");
 		} catch (IllegalArgumentException e) {
@@ -28,6 +29,7 @@ public class mCommand implements Command {
 		} catch(NullPointerException e){
 			System.err.println("Field not found.");
 		} catch(ArrayIndexOutOfBoundsException e){
+			e.printStackTrace();
 			System.err.println("Value to assign to field not found.");
 		}
 		

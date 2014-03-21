@@ -58,7 +58,7 @@ public class TypeValidator {
 		return retVal;
 	}
 	
-	public boolean isPrimitive(Class <?> c){
+	public boolean isPrimitiveWrapper(Class <?> c){
 		String name = c.getName();
 		if(name.contains("Integer")){
 			return true;
@@ -74,9 +74,10 @@ public class TypeValidator {
 			return true;
 		}else if(name.contains("Float")){
 			return true;
-		}else{
-			System.err.println("Incompatible type to assign field!");
+		}else if(name.contains("Character")){
+			return true;
 		}
+		
 		return false;
 	}
 }

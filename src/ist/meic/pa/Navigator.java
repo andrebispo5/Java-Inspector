@@ -16,8 +16,11 @@ public class Navigator {
 	
 	public void add(Object obj){
 		if(!objectArray.contains(obj)){
+			if(currentPosition != -1){
+				objectArray.subList(currentPosition+1, objectArray.size()).clear();
+			}
 			objectArray.add(obj);
-			currentPosition=objectArray.size()-1;
+			currentPosition+=1;
 		}else{
 			int objPos = objectArray.indexOf(obj);
 			objectArray.set(objPos, obj);
@@ -77,16 +80,25 @@ public class Navigator {
 		System.err.println(" ");
 		System.err.println("« « « Navigation Bar » » »");
 		for(Object o : objectArray){
+			int objPos = objectArray.indexOf(o);
 			String cName = o.getClass().getSimpleName();
-			String value = o.toString();; 
-			if(value.contains(o.getClass().getPackage().getName()))
-				value = value.substring(o.getClass().getPackage().getName().length()+1, value.length());
-			if(objectArray.indexOf(o) == currentPosition)
-				System.err.print("[X]" + cName + "=" + value + "   " );
+			String objToString = String.valueOf(o); 
+//			String packageName = o.getClass().getPackage().getName();
+//			if(objToString.contains(packageName))
+//				objToString = objToString.substring(packageName.length()+1, objToString.length());
+			if(objPos == currentPosition)
+				System.err.print("[X]" + cName + "=" + objToString + "   " );
 			else
-				System.err.print("["+ objectArray.indexOf(o)+"]"+ cName + "=" + value + "   " );
+				System.err.print("["+ objPos +"]"+ cName + "=" + objToString + "   " );
 		}
 		System.err.println("");
+	}
+
+	public void updateExistingObject(Object fieldValue) {
+		if(objectArray.contains(fieldValue)){
+			int posStoredObject = objectArray.indexOf(fieldValue);
+			objectArray.set(posStoredObject,fieldValue);
+		}	
 	}
 }
 	

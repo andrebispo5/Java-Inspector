@@ -26,13 +26,44 @@ public class Inspector {
 
 	
 	public void inspectObject(Object object){
+		TypeValidator tv = new TypeValidator(); 
+		navigator.add(object);
+		Class<?> c = object.getClass();
+		if(tv.isPrimitiveWrapper(c)){
 			navigator.add(object);
-			Class<? extends Object> c = object.getClass();
+			System.err.println(object);
+		}else if(c.isArray()){
+			BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+			int length = Array.getLength(object);
+			System.err.println("Inspecting an Array of length "+ length +", press v to view elements or enter number.");
+			String command;
+			try {
+				command = in.readLine();
+				if(command.contains("v")){
+					int colCount = 0;
+					for (int i = 0; i < length; i ++) {
+						Object arrayElement = Array.get(object, i);
+						System.err.print("["+i+"]"+arrayElement + " ");
+						if(colCount ==10){
+							System.err.print("\n");
+					        colCount=0;
+						}
+						colCount++;
+				    }
+				}else{
+					int position = Integer.parseInt(command);
+					inspectObject(Array.get(object, position));
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}else{
 			System.err.println(object.toString() + " is an instance of class "  + c.getName() );
 			System.err.println("\n-----FIELDS-----");
 			printFields(object, c);
 			System.err.println("\n-----METHODS-----");
 			printMethods(object, c);
+		}
 	}
 
 	private void printNavigation() {

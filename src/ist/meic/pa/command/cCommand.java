@@ -91,7 +91,7 @@ public class cCommand implements Command {
 				Object newObj = nav.getSavedObject(argArray[i].substring(1,argArray[i].length()));
 				Class<?> c = newObj.getClass();
 				TypeValidator tv = new TypeValidator();
-				if(tv.isPrimitive(c)){
+				if(tv.isPrimitiveWrapper(c)){
 					try {
 						c = (Class<?>) c.getField("TYPE").get(null);
 					} catch (NoSuchFieldException e) {
