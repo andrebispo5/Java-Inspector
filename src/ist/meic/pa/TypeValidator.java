@@ -51,7 +51,12 @@ public class TypeValidator {
 			}
 		}else if(name.contains("String")){
 			retVal = val;
-		}else{
+		}else if(name.matches("char[]")){
+			retVal=val.toCharArray();
+		}else if(name.matches("char")){
+			retVal=val.charAt(0);
+		}
+		else{
 			System.err.println("Incompatible type to assign field! ");
 		}
 		

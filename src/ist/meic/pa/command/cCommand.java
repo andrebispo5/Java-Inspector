@@ -87,6 +87,10 @@ public class cCommand implements Command {
 				classArgs[i]=long.class;
 				args[i] = Long.parseLong(argArray[i].substring(0,argArray[i].length() -1));
 			}
+			else if(argArray[i].startsWith("\'")){
+				classArgs[i]=char.class;
+				args[i] = argArray[i].substring(1,argArray[i].length()-1).charAt(0);
+			}
 			else if(argArray[i].startsWith("@")){
 				Object newObj = nav.getSavedObject(argArray[i].substring(1,argArray[i].length()));
 				Class<?> c = newObj.getClass();
