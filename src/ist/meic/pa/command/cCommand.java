@@ -6,11 +6,14 @@ import ist.meic.pa.TypeValidator;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 
 public class cCommand implements Command {
 
 	private Class<?>[] classArgs;
 	private Object[] args;
+	private final Map<Object[], Method> parameterTypeMap = new HashMap<Object[], Method>();
 	
 	
 	@Override
@@ -27,45 +30,52 @@ public class cCommand implements Command {
 		args= new Object[numArgs];
 		try {
 			computeAllArgs(argList, nav);
-			Method method = getMethod(commandList, c);
-			if(method != null)
-				System.err.println(method.invoke(obj, args));
-			else
-				System.err.println("Method not found. try again.");
+			getMethod(commandList, c);
+			for(Object[] object : parameterTypeMap.keySet()){
+				if (object.length == args.length){
+					System.err.println(parameterTypeMap.get(object).invoke(obj, args));
+					return;
+				}
+			}
+
+			System.err.println("METHOD NOT FOUND!");
 		} catch (InstantiationException e) {
-			System.err.println("Method not found.");
+			System.err.println("1");
 		} catch (IllegalAccessException e) {
-			System.err.println("Method not found.");
+			System.err.println("2");
 		} catch (SecurityException e) {
-			System.err.println("Method not found.");
+			System.err.println("3");
 		} catch (NoSuchMethodException e) {
-			System.err.println("Method not found.");
+			System.err.println("4");
 		} catch (IllegalArgumentException e) {
-			System.err.println("Method not found.");
+			System.err.println("5");
 		} catch (InvocationTargetException e) {
-			System.err.println("Method not found.");
+			System.err.println("6");
 		} catch (ClassNotFoundException e) {
-			System.err.println("Method not found.");
+			System.err.println("7");
 		}
 	}
 
 
-	private Method getMethod(String[] commandList, Class<? extends Object> c)
+	private void getMethod(String[] commandList, Class<? extends Object> c)
 			throws NoSuchMethodException {
-		Method meth=null;
-		try{
-			meth = c.getMethod(commandList[1],classArgs);
-		}
-		catch(NoSuchMethodException e){
-			System.err.println("Method not found in class:" + c + " searching superclass.");
+		Method[] meths=null;
+		meths = c.getDeclaredMethods();
+		for (Method method : meths) {
+			if (method.getName().equals(commandList[1])) 
+				parameterTypeMap.put(method.getParameterTypes(), method);
 		}
 		Class <?> sc = c.getSuperclass();
-		if (meth==null && sc != null)
-			meth = getMethod(commandList, sc);
-		return meth;
+		if (sc != null){
+			System.err.println("Method not found in class:" + c + " searching superclass.");
+			getMethod(commandList, sc);
+		}
+		return;
 	}
 	
 	
+	
+
 	private void computeAllArgs(String[] argArray, Navigator nav) throws InstantiationException, IllegalAccessException, ClassNotFoundException, IllegalArgumentException, SecurityException, InvocationTargetException, NoSuchMethodException{
 		for (int i=0;i<argArray.length;i++){
 			if(argArray[i].startsWith("\"")){
@@ -89,7 +99,7 @@ public class cCommand implements Command {
 			}
 			else if(argArray[i].startsWith("\'")){
 				classArgs[i]=char.class;
-				args[i] = argArray[i].substring(1,argArray[i].length()-1).charAt(0);
+				args[i] = argArray[i].charAt(1);
 			}
 			else if(argArray[i].startsWith("@")){
 				Object newObj = nav.getSavedObject(argArray[i].substring(1,argArray[i].length()));
