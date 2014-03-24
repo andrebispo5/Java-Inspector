@@ -31,28 +31,35 @@ public class cCommand implements Command {
 		try {
 			computeAllArgs(argList, nav);
 			getMethod(commandList, c);
-			for(Object[] object : parameterTypeMap.keySet()){
-				if (object.length == args.length){
-					System.err.println(parameterTypeMap.get(object).invoke(obj, args));
-					return;
+			Method m = parameterTypeMap.get(classArgs);
+			if (m==null){
+				for(Object[] object : parameterTypeMap.keySet()){
+					if (object.length == args.length){
+						try{
+							System.err.println(parameterTypeMap.get(object).invoke(obj, args));
+						}
+						catch (IllegalArgumentException e) {
+							continue;
+						} 
+						return;
+					}
 				}
 			}
-
-			System.err.println("METHOD NOT FOUND!");
+			else{
+				m.invoke(obj, args);
+			}
 		} catch (InstantiationException e) {
-			System.err.println("1");
+			e.printStackTrace();
 		} catch (IllegalAccessException e) {
-			System.err.println("2");
+			e.printStackTrace();
 		} catch (SecurityException e) {
-			System.err.println("3");
+			e.printStackTrace();
 		} catch (NoSuchMethodException e) {
-			System.err.println("4");
-		} catch (IllegalArgumentException e) {
-			System.err.println("5");
+			e.printStackTrace();
 		} catch (InvocationTargetException e) {
-			System.err.println("6");
+			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
-			System.err.println("7");
+			e.printStackTrace();
 		}
 	}
 
@@ -67,7 +74,6 @@ public class cCommand implements Command {
 		}
 		Class <?> sc = c.getSuperclass();
 		if (sc != null){
-			System.err.println("Method not found in class:" + c + " searching superclass.");
 			getMethod(commandList, sc);
 		}
 		return;
@@ -82,10 +88,15 @@ public class cCommand implements Command {
 				classArgs[i]=String.class;
 				args[i] = argArray[i].substring(1,argArray[i].length() -1);
 			}
+			else if(argArray[i].endsWith("f")){
+				classArgs[i]=float.class;
+				args[i] = Float.parseFloat(argArray[i].substring(0,argArray[i].length()-1));
+			}
 			else if(argArray[i].contains(".")){
 				classArgs[i]=double.class;
 				args[i] = Double.parseDouble(argArray[i]);
-			}else if (argArray[i].contains("true")||argArray[i].contains("false")){
+			}
+			else if (argArray[i].contains("true")||argArray[i].contains("false")){
 				classArgs[i]=boolean.class;	
 				args[i] = Boolean.parseBoolean(argArray[i]);
 			}

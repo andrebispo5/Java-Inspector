@@ -155,7 +155,7 @@ public class Inspector {
 
 		}
 		Class<?> cl = c.getSuperclass();
-		if(cl != null)
+		if(cl != Object.class)
 			printMethods(object, cl);
 	}
 

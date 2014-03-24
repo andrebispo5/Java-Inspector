@@ -22,6 +22,6 @@ public class E extends B {
 		this.f = f;
 	}
 
-	public static long i =10L;
+	public static float i =10.22f;
 	
 }
