@@ -1,0 +1,36 @@
+<project default="compile">
+    <property name="classes-dir" location="bin" />
+    <property name="src-dir" location="src" />
+   
+   <target name="init">
+       <echo message="Creating directory for compiled classes" level="info" />
+       <mkdir dir="${classes-dir}" />
+   </target>
+   
+    <target name="clean">
+        <echo message="Performing cleaning operations for compiling" level="info" />
+        <delete file="Inspector.jar"  />
+        <delete dir="${classes-dir}" failonerror="false" />
+    </target>
+    
+    <target name="compile" depends="clean, init">
+        <echo message="Compiling classes" level="info" />
+        <javac includeantruntime="false" srcdir="${src-dir}"
+        destdir="${classes-dir}" />
+        <echo message="Creating Jar" level="info" />
+        <jar destfile="./Inspector.jar"
+        basedir="${classes-dir}" />
+        <delete dir="${classes-dir}" failonerror="false" />
+    </target>
+    
+    <target name="run" depends="compile">
+        <java classname="ist.meic.pa.myProgram">
+            <classpath path="./Inspector.jar" />
+        </java>
+    </target>
+</project>
+
+
+
+
+
