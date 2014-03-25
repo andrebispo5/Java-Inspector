@@ -22,7 +22,7 @@ public class gCommand implements Command {
 	}
 
 	private void chooseOptions(Navigator nav) {
-		System.err.println("CHOOSE YOUR DESTINY: #MortalKombat");
+		System.err.println("Choose the object you want to go!");
 		nav.printGraph();
 		System.err.print("=>");
 		try {
