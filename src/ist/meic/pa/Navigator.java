@@ -4,7 +4,8 @@ import java.util.HashMap;
 
 public class Navigator {
 
-	private static final int WINDOW_NAV_SIZE = 3; 
+	private static final int EMPTY_ARRAY_POSITION = -1; 
+	private static final int WINDOW_NAV_SIZE = 9; 
 	private int currentPosition;
 	private ArrayList<Object> objectArray;
 	private HashMap<String, Object> savedObjects;
@@ -12,15 +13,12 @@ public class Navigator {
 	public Navigator(){
 		objectArray = new ArrayList<Object>();
 		savedObjects = new HashMap<String, Object>();
-		currentPosition=-1;
-		for(int i=0;i<=20;i++){
-			objectArray.add(i);
-		}
+		currentPosition=EMPTY_ARRAY_POSITION;
 	}
 	
 	public void add(Object obj){
 		if(!objectArray.contains(obj)){
-			if(currentPosition != -1){
+			if(currentPosition != EMPTY_ARRAY_POSITION){
 				objectArray.subList(currentPosition+1, objectArray.size()).clear();
 			}
 			objectArray.add(obj);
@@ -80,8 +78,7 @@ public class Navigator {
 		return savedObjects.get(name);
 	}
 	
-	public void printNavigationBar(){
-		System.err.println(" ");
+	public int[] getStartEndPositions(){
 		int l = objectArray.size();
 		int start = (currentPosition-(WINDOW_NAV_SIZE/2));
 		int end = start + (WINDOW_NAV_SIZE);
@@ -97,7 +94,14 @@ public class Navigator {
 		}
 		else
 			end=l;
-		System.err.println("« « « Navigation Bar » » »");
+		return new int[]{start,end};
+	}
+	
+	public void printNavigationBar(){
+		int[] pos = getStartEndPositions();
+		int start = pos[0];
+		int end = pos[1];
+		System.err.println("\n--------Navigation Bar--------");
 		for(int i = start; i<end ; i++){
 			Object o = objectArray.get(i);
 			String cName = o.getClass().getSimpleName();

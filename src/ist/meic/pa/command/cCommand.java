@@ -13,41 +13,24 @@ public class cCommand implements Command {
 
 	private Class<?>[] classArgs;
 	private Object[] args;
-	private final Map<Object[], Method> parameterTypeMap = new HashMap<Object[], Method>();
+	private final Map<Object[], Method> candidateMethodsMap = new HashMap<Object[], Method>();
 	
 	
 	@Override
 	public void execute(Inspector gadget, String[] commandList) {
-		int numArgs=commandList.length-2;
 		Navigator nav = gadget.getNavigator();
 		Object obj = nav.getObject();
 		Class<? extends Object> c = obj.getClass();
-		//ARRAY COM INPUT DOS ARGUMENTOS
+		int numArgs=commandList.length-2;
 		String[] argList=new String[numArgs];
-		//COPIA ARGUMENTOS PARA ARRAY ANTERIOR
 		System.arraycopy(commandList, 2, argList, 0, numArgs);
 		classArgs = new Class<?>[numArgs];
 		args= new Object[numArgs];
 		try {
 			computeAllArgs(argList, nav);
-			getMethod(commandList, c);
-			Method m = parameterTypeMap.get(classArgs);
-			if (m==null){
-				for(Object[] object : parameterTypeMap.keySet()){
-					if (object.length == args.length){
-						try{
-							System.err.println(parameterTypeMap.get(object).invoke(obj, args));
-						}
-						catch (IllegalArgumentException e) {
-							continue;
-						} 
-						return;
-					}
-				}
-			}
-			else{
-				m.invoke(obj, args);
-			}
+			candidateMethodsToInvoke(commandList, c);
+			Method m = candidateMethodsMap.get(classArgs);
+			callMethod(obj, m);
 		} catch (InstantiationException e) {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
@@ -64,17 +47,37 @@ public class cCommand implements Command {
 	}
 
 
-	private void getMethod(String[] commandList, Class<? extends Object> c)
+	private void callMethod(Object obj, Method m)
+			throws IllegalAccessException, InvocationTargetException {
+		if (m==null){
+			for(Object[] object : candidateMethodsMap.keySet()){
+
+				try{
+					System.err.println(candidateMethodsMap.get(object).invoke(obj, args));
+				}
+				catch (IllegalArgumentException e) {
+					continue;
+				} 
+				break;
+			}
+		}
+		else{
+			System.err.println(m.invoke(obj, args));
+		}
+	}
+
+
+	private void candidateMethodsToInvoke(String[] commandList, Class<? extends Object> c)
 			throws NoSuchMethodException {
 		Method[] meths=null;
 		meths = c.getDeclaredMethods();
 		for (Method method : meths) {
-			if (method.getName().equals(commandList[1])) 
-				parameterTypeMap.put(method.getParameterTypes(), method);
+			if (method.getName().equals(commandList[1]) && method.getParameterTypes().length == args.length ) 
+				candidateMethodsMap.put(method.getParameterTypes(), method);
 		}
 		Class <?> sc = c.getSuperclass();
 		if (sc != null){
-			getMethod(commandList, sc);
+			candidateMethodsToInvoke(commandList, sc);
 		}
 		return;
 	}

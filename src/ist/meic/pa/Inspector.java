@@ -33,36 +33,46 @@ public class Inspector {
 			navigator.add(object);
 			System.err.println(object);
 		}else if(c.isArray()){
-			BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-			int length = Array.getLength(object);
-			System.err.println("Inspecting an Array of length "+ length +", press v to view elements or enter number.");
-			String command;
-			try {
-				command = in.readLine();
-				if(command.contains("v")){
-					int colCount = 0;
-					for (int i = 0; i < length; i ++) {
-						Object arrayElement = Array.get(object, i);
-						System.err.print("["+i+"]"+arrayElement + " ");
-						if(colCount ==10){
-							System.err.print("\n");
-					        colCount=0;
-						}
-						colCount++;
-				    }
-				}else{
-					int position = Integer.parseInt(command);
-					inspectObject(Array.get(object, position));
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			inspectArray(object);
 		}else{
 			System.err.println(object.toString() + " is an instance of class "  + c.getName() );
 			System.err.println("\n-----FIELDS-----");
 			printFields(object, c);
 			System.err.println("\n-----METHODS-----");
 			printMethods(object, c);
+		}
+	}
+
+
+	private void inspectArray(Object object) {
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+		int length = Array.getLength(object);
+		System.err.println("Inspecting an Array of length "+ length +", press v to view elements or enter number.");
+		String command;
+		try {
+			command = in.readLine();
+			if(command.contains("v")){
+				printArray(object, length);
+			}else{
+				int position = Integer.parseInt(command);
+				inspectObject(Array.get(object, position));
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+
+	private void printArray(Object object, int length) {
+		int colCount = 0;
+		for (int i = 0; i < length; i ++) {
+			Object arrayElement = Array.get(object, i);
+			System.err.print("["+i+"]"+arrayElement + " ");
+			if(colCount ==10){
+				System.err.print("\n");
+		        colCount=0;
+			}
+			colCount++;
 		}
 	}
 
@@ -140,15 +150,7 @@ public class Inspector {
 			else
 				methReturnType=type.getName();
 			Class<?> param[] = meth[j].getParameterTypes();
-			String parameters = new String();
-			for ( int i =0; i<param.length;i++){
-				if (param[i].isArray())
-					parameters += param[i].getComponentType().getName() + "[] ";
-				else
-					parameters+=param[i].getName();
-				if (i < param.length-1)
-					parameters +=", ";
-			}
+			String parameters = argumentsToString(param);
 			if (!(modfs.equals("")))
 				System.err.print(modfs + " ");
 			System.err.println(methReturnType + " " + methodName + "(" + " " + parameters + " );"); 
@@ -160,13 +162,27 @@ public class Inspector {
 	}
 
 
+	private String argumentsToString(Class<?>[] param) {
+		String parameters = "";
+		for ( int i =0; i<param.length;i++){
+			if (param[i].isArray())
+				parameters += param[i].getComponentType().getName() + "[] ";
+			else
+				parameters+=param[i].getName();
+			if (i < param.length-1)
+				parameters +=", ";
+		}
+		return parameters;
+	}
+
+
 
 	public Navigator getNavigator() {
 		return this.navigator;
 	}
 
 	private void printWelcomeMsg() {
-		System.err.println("Welcome to the most advanced shell in the world. Enjoy!");
+		System.err.println("JAVA INSPECTOR v1.0");
 		System.err.println("-------------------------------------------------------");
 		System.err.println("");
 	}
