@@ -59,7 +59,7 @@ public class Navigator {
 		for(int i=0;i<objectArray.size();i++){
 			Object obj = objectArray.get(i);
 			String cName = obj.getClass().getSimpleName();
-			System.err.println("[" + i + "] Object «" + cName +"» value «"+ obj+"» ");
+			System.err.println("[" + i + "] Object " + cName +" value "+ obj+" ");
 		}
 	}
 	

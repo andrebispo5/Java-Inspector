@@ -32,17 +32,17 @@ public class cCommand implements Command {
 			Method m = candidateMethodsMap.get(classArgs);
 			callMethod(obj, m);
 		} catch (InstantiationException e) {
-			e.printStackTrace();
+			System.err.println("Not possible to invoke method");
 		} catch (IllegalAccessException e) {
-			e.printStackTrace();
+			System.err.println("Not possible to invoke method");
 		} catch (SecurityException e) {
-			e.printStackTrace();
+			System.err.println("Not possible to invoke method");
 		} catch (NoSuchMethodException e) {
-			e.printStackTrace();
+			System.err.println("Method not found");
 		} catch (InvocationTargetException e) {
-			e.printStackTrace();
+			System.err.println("Not possible to invoke method");
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+			System.err.println("Method not found");
 		}
 	}
 
