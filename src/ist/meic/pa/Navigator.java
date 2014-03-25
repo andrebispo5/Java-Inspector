@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 public class Navigator {
 
-	private static final int WINDOW_NAV_SIZE = 9; 
+	private static final int WINDOW_NAV_SIZE = 3; 
 	private int currentPosition;
 	private ArrayList<Object> objectArray;
 	private HashMap<String, Object> savedObjects;
@@ -84,21 +84,21 @@ public class Navigator {
 		System.err.println(" ");
 		int l = objectArray.size();
 		int start = (currentPosition-(WINDOW_NAV_SIZE/2));
-		int end = start + (WINDOW_NAV_SIZE-1);
+		int end = start + (WINDOW_NAV_SIZE);
 		if(start<0){
 			start=0;
-			end = WINDOW_NAV_SIZE-1;
+			end = WINDOW_NAV_SIZE;
 		}
 		if(l > WINDOW_NAV_SIZE){
 			if(end>l){
 				start-=end%l;
-				end=l-1;
+				end=l;
 			}
 		}
 		else
-			end=l-1;
+			end=l;
 		System.err.println("« « « Navigation Bar » » »");
-		for(int i = start; i<=end ; i++){
+		for(int i = start; i<end ; i++){
 			Object o = objectArray.get(i);
 			String cName = o.getClass().getSimpleName();
 			String objToString = String.valueOf(o); 
