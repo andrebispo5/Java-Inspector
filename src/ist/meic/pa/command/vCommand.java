@@ -8,7 +8,7 @@ public class vCommand implements Command {
 	@Override
 	public void execute(Inspector gadget, String[] commandList) {
 		Navigator nav = gadget.getNavigator();
-		System.err.println("Saved Objects:");
+		System.err.println("Saved Objects: ");
 		nav.printSavedObjects();
 
 	}
