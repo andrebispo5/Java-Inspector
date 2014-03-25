@@ -27,7 +27,8 @@ public class iCommand implements Command {
 			Object current = nav.getObject();
 			Field field = getAvailableField(commandList, current);
 			try {
-				gadget.inspectObject(field.get(current));
+				if(field!=null)	
+					gadget.inspectObject(field.get(current));
 			} catch (IllegalArgumentException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

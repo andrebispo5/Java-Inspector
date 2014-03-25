@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 public class Navigator {
 
+	private static final int WINDOW_NAV_SIZE = 9; 
 	private int currentPosition;
 	private ArrayList<Object> objectArray;
 	private HashMap<String, Object> savedObjects;
@@ -12,6 +13,9 @@ public class Navigator {
 		objectArray = new ArrayList<Object>();
 		savedObjects = new HashMap<String, Object>();
 		currentPosition=-1;
+		for(int i=0;i<=20;i++){
+			objectArray.add(i);
+		}
 	}
 	
 	public void add(Object obj){
@@ -78,18 +82,30 @@ public class Navigator {
 	
 	public void printNavigationBar(){
 		System.err.println(" ");
+		int l = objectArray.size();
+		int start = (currentPosition-(WINDOW_NAV_SIZE/2));
+		int end = start + (WINDOW_NAV_SIZE-1);
+		if(start<0){
+			start=0;
+			end = WINDOW_NAV_SIZE-1;
+		}
+		if(l > WINDOW_NAV_SIZE){
+			if(end>l){
+				start-=end%l;
+				end=l-1;
+			}
+		}
+		else
+			end=l-1;
 		System.err.println("« « « Navigation Bar » » »");
-		for(Object o : objectArray){
-			int objPos = objectArray.indexOf(o);
+		for(int i = start; i<=end ; i++){
+			Object o = objectArray.get(i);
 			String cName = o.getClass().getSimpleName();
 			String objToString = String.valueOf(o); 
-//			String packageName = o.getClass().getPackage().getName();
-//			if(objToString.contains(packageName))
-//				objToString = objToString.substring(packageName.length()+1, objToString.length());
-			if(objPos == currentPosition)
+			if(i == currentPosition)
 				System.err.print("[X]" + cName + "=" + objToString + "   " );
 			else
-				System.err.print("["+ objPos +"]"+ cName + "=" + objToString + "   " );
+				System.err.print("["+ i +"]"+ cName + "=" + objToString + "   " );
 		}
 		System.err.println("");
 	}
