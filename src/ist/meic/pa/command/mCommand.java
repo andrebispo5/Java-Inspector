@@ -16,8 +16,8 @@ public class mCommand implements Command {
 		Object obj = nav.getObject();
 		Class<? extends Object> c = obj.getClass();
 		Field f = null;
-		String newValue = commandList[2];
 		try {
+			String newValue = commandList[2];
 			f = this.getField(obj, c, commandList[1]);
 			TypeValidator t = new TypeValidator();
 			if(newValue.startsWith("@")){
