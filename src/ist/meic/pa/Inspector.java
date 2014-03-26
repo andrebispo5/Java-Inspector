@@ -7,6 +7,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.*;
 
+/**
+ * The Class Inspector.
+ * Main class of the application. Provides methods to inspect objects and to print messages to the console.
+ * It's also the class that provides interaction with the user.
+ */
 public class Inspector {
 	
 	private boolean running ;
@@ -17,70 +22,30 @@ public class Inspector {
 		running=true;
 	}
 	
-	
+	/**
+	 * Starts the inspection of an object and the interaction with the user.
+	 *
+	 * @param object	the object to inspect 
+	 */
 	public void inspect(Object object){
 		printWelcomeMsg();
 		inspectObject(object);
 		listenConsole();
 	}
-
 	
-	public void inspectObject(Object object){
-		TypeValidator tv = new TypeValidator(); 
-		navigator.add(object);
-		Class<?> c = object.getClass();
-		if(tv.isPrimitiveWrapper(c)){
-			navigator.add(object);
-			System.err.println(object);
-		}else if(c.isArray()){
-			inspectArray(object);
-		}else{
-			System.err.println(object.toString() + " is an instance of class "  + c.getName() );
-			System.err.println("\n-----FIELDS-----");
-			printFields(object, c);
-			System.err.println("\n-----METHODS-----");
-			printMethods(object, c);
-		}
+	/**
+	 * Prints the welcome message.
+	 */
+	private void printWelcomeMsg() {
+		System.err.println("JAVA INSPECTOR v1.0");
+		System.err.println("-------------------------------------------------------");
+		System.err.println("");
 	}
-
-
-	private void inspectArray(Object object) {
-		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-		int length = Array.getLength(object);
-		System.err.println("Inspecting an Array of length "+ length +", press v to view elements or enter number.");
-		String command;
-		try {
-			command = in.readLine();
-			if(command.contains("v")){
-				printArray(object, length);
-			}else{
-				int position = Integer.parseInt(command);
-				inspectObject(Array.get(object, position));
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-
-	private void printArray(Object object, int length) {
-		int colCount = 0;
-		for (int i = 0; i < length; i ++) {
-			Object arrayElement = Array.get(object, i);
-			System.err.print("["+i+"]"+arrayElement + " ");
-			if(colCount ==10){
-				System.err.print("\n");
-		        colCount=0;
-			}
-			colCount++;
-		}
-	}
-
-	private void printNavigation() {
-		navigator.printNavigationBar();
-	}
-
-
+	
+	/**
+	 * This method is responsible for the interaction with the user. While the inspector is running, it awaits commands from the user
+	 * and runs them.
+	 */
 	private void listenConsole() {
 		String command = null;
 		String[] commandSplit = null;
@@ -106,6 +71,68 @@ public class Inspector {
 		
 	}
 
+	
+	/**
+	 * Inspects a general object. Distinguishes between primitive types, arrays and classes 
+	 * and acts accordingly. If the object is a primitive type, it adds the object to the navigation bar and prints its value.
+	 * If the object is an array, it calls a method to inspect the array. If the object is a class, it calls methods to print
+	 * its fields and methods.
+	 * 
+	 *
+	 * @param object 	the object to inspect
+	 */
+	public void inspectObject(Object object){
+		TypeValidator tv = new TypeValidator(); 
+		navigator.add(object);
+		Class<?> c = object.getClass();
+		if(tv.isPrimitiveWrapper(c)){
+			navigator.add(object);
+			System.err.println(object);
+		}else if(c.isArray()){
+			inspectArray(object);
+		}else{
+			System.err.println(object.toString() + " is an instance of class "  + c.getName() );
+			System.err.println("\n-----FIELDS-----");
+			printFields(object, c);
+			System.err.println("\n-----METHODS-----");
+			printMethods(object, c);
+		}
+	}
+
+	/**
+	 * Inspects an object representing an array. Grants the option to view the entire content of an array or
+	 * to inspect a specific position of the array.
+	 *
+	 * @param object 	An object representing an array
+	 */
+	private void inspectArray(Object object) {
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+		int length = Array.getLength(object);
+		System.err.println("Inspecting an Array of length "+ length +", press v to view elements or enter number.");
+		String command;
+		try {
+			command = in.readLine();
+			if(command.contains("v")){
+				printArray(object, length);
+			}else{
+				int position = Integer.parseInt(command);
+				inspectObject(Array.get(object, position));
+			}
+		} catch (IOException e) {
+			System.err.println("Cannot complete the operation.");
+		}catch (ArrayIndexOutOfBoundsException e){
+			System.err.println("Choose a valid array position to inspect.");
+		}catch (NumberFormatException e){
+			System.err.println("Choose a valid array position to inspect.");
+		}
+	}
+	
+	/**
+	 * Prints the fields of a class and its superclasses.
+	 *
+	 * @param object 	The object being inspected
+	 * @param c 		The class of the object being inspected
+	 */
 	private void printFields(Object object, Class<? extends Object> c){
 		Field[] fields = c.getDeclaredFields();
 		for (int j=0;j<fields.length;j++){
@@ -133,10 +160,12 @@ public class Inspector {
 			printFields(object, cl);
 	}
 	
-	public void quit(){
-		running=false;
-	}
-	
+	/**
+	 * Prints the methods of an object and its superclasses.
+	 *
+	 * @param object 	The object being inspected
+	 * @param c 		The class of the object being inspected
+	 */
 	private void printMethods(Object object, Class<? extends Object> c){
 		Method[] meth = c.getDeclaredMethods();
 		for (int j=0;j<meth.length;j++){
@@ -161,7 +190,45 @@ public class Inspector {
 			printMethods(object, cl);
 	}
 
+	/**
+	 * Prints the content of an array to the console
+	 *
+	 * @param object 	An object representing an array
+	 * @param length 	The length of the array
+	 */
+	private void printArray(Object object, int length) {
+		int colCount = 0;
+		for (int i = 0; i < length; i ++) {
+			Object arrayElement = Array.get(object, i);
+			System.err.print("["+i+"]"+arrayElement + " ");
+			if(colCount ==10){
+				System.err.print("\n");
+		        colCount=0;
+			}
+			colCount++;
+		}
+	}
 
+	/**
+	 * Prints the navigation bar.
+	 */
+	private void printNavigation() {
+		navigator.printNavigationBar();
+	}
+	
+	/**
+	 * Causes the inspection to terminate.
+	 */
+	public void quit(){
+		running=false;
+	}
+	
+	/**
+	 * Takes the parameters of a method and converts them into a string.
+	 *
+	 * @param param 	The parameters of the method
+	 * @return A string of the parameters
+	 */
 	private String argumentsToString(Class<?>[] param) {
 		String parameters = "";
 		for ( int i =0; i<param.length;i++){
@@ -175,15 +242,13 @@ public class Inspector {
 		return parameters;
 	}
 
-
-
+	/**
+	 * Gets the navigation bar.
+	 *
+	 * @return The navigation bar
+	 */
 	public Navigator getNavigator() {
 		return this.navigator;
 	}
 
-	private void printWelcomeMsg() {
-		System.err.println("JAVA INSPECTOR v1.0");
-		System.err.println("-------------------------------------------------------");
-		System.err.println("");
-	}
 }

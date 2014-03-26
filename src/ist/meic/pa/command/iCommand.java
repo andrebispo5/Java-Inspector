@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
+/*Module to call inspection over an object*/
 public class iCommand implements Command {
 	
 	
@@ -21,6 +22,7 @@ public class iCommand implements Command {
 	}
 
 	
+	/*Sets the current object to the one given as argument, inspecting it*/
 	@Override
 	public void execute(Inspector gadget, String[] commandList) {
 			Navigator nav = gadget.getNavigator(); 
@@ -39,7 +41,7 @@ public class iCommand implements Command {
 			
 		}
 
-
+	/*Returns the field from the current object*/
 	private Field getAvailableField(String[] commandList, Object current) {
 		Field field = null;
 		try {
@@ -76,6 +78,7 @@ public class iCommand implements Command {
 		return field;
 	}
 
+	/*Finds all the matching fields with a given name. Used for shadowed fields*/
 	public void getMatchingFields(Object obj, Class<?> objClass, String fieldName) throws SecurityException, NoSuchFieldException{
 		Field[] fields = objClass.getDeclaredFields();
 		for (int j=0;j<fields.length;j++){

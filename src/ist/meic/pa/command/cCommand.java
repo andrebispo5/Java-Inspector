@@ -9,15 +9,23 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
+/*Module for implementation of command to call methods*/
 public class cCommand implements Command {
 
 	private Class<?>[] classArgs;
 	private Object[] args;
 	private final Map<Object[], Method> candidateMethodsMap = new HashMap<Object[], Method>();
 	
-	
+	/*Computes the list of arguments given as string, 
+	 * checks for the possible method to call with the name and arguments given 
+	 * and calls the suitable method*/
 	@Override
 	public void execute(Inspector gadget, String[] commandList) {
+		if (commandList.length < 2){
+			System.err.println("Call command syntax: c <method> <argument1> ... ");
+			return;
+		}
+			
 		Navigator nav = gadget.getNavigator();
 		Object obj = nav.getObject();
 		Class<? extends Object> c = obj.getClass();
@@ -46,27 +54,31 @@ public class cCommand implements Command {
 		}
 	}
 
-
+	/*tries to invoke one of the possible methods*/
 	private void callMethod(Object obj, Method m)
 			throws IllegalAccessException, InvocationTargetException {
 		if (m==null){
+			boolean MethodFound = false;
 			for(Object[] object : candidateMethodsMap.keySet()){
-
 				try{
 					System.err.println(candidateMethodsMap.get(object).invoke(obj, args));
+					MethodFound=true;
 				}
 				catch (IllegalArgumentException e) {
 					continue;
 				} 
 				break;
 			}
+			if(!MethodFound)
+				System.err.println("Method Not Found.");
 		}
 		else{
 			System.err.println(m.invoke(obj, args));
+			
 		}
 	}
 
-
+	/*Computes the list of methods assignable to invoke*/
 	private void candidateMethodsToInvoke(String[] commandList, Class<? extends Object> c)
 			throws NoSuchMethodException {
 		Method[] meths=null;
@@ -84,14 +96,14 @@ public class cCommand implements Command {
 	
 	
 	
-
+	/*Computes the arguments given as a string to the respective specific objects and classes*/
 	private void computeAllArgs(String[] argArray, Navigator nav) throws InstantiationException, IllegalAccessException, ClassNotFoundException, IllegalArgumentException, SecurityException, InvocationTargetException, NoSuchMethodException{
 		for (int i=0;i<argArray.length;i++){
 			if(argArray[i].startsWith("\"")){
 				classArgs[i]=String.class;
 				args[i] = argArray[i].substring(1,argArray[i].length() -1);
 			}
-			else if(argArray[i].endsWith("f")){
+			else if(argArray[i].matches("[0-9]+f")){
 				classArgs[i]=float.class;
 				args[i] = Float.parseFloat(argArray[i].substring(0,argArray[i].length()-1));
 			}
@@ -99,7 +111,7 @@ public class cCommand implements Command {
 				classArgs[i]=double.class;
 				args[i] = Double.parseDouble(argArray[i]);
 			}
-			else if (argArray[i].contains("true")||argArray[i].contains("false")){
+			else if (argArray[i].matches("true")||argArray[i].matches("false")){
 				classArgs[i]=boolean.class;	
 				args[i] = Boolean.parseBoolean(argArray[i]);
 			}
@@ -111,11 +123,11 @@ public class cCommand implements Command {
 				classArgs[i]=long.class;
 				args[i] = Long.parseLong(argArray[i].substring(0,argArray[i].length() -1));
 			}
-			else if(argArray[i].startsWith("\'")){
+			else if(argArray[i].matches("\'[A-Za-z0-9]\'")){
 				classArgs[i]=char.class;
 				args[i] = argArray[i].charAt(1);
 			}
-			else if(argArray[i].startsWith("@")){
+			else if(argArray[i].matches("@[A-Za-z0-9]+")){
 				Object newObj = nav.getSavedObject(argArray[i].substring(1,argArray[i].length()));
 				Class<?> c = newObj.getClass();
 				TypeValidator tv = new TypeValidator();

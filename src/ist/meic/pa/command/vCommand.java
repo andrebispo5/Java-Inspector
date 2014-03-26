@@ -3,6 +3,7 @@ package ist.meic.pa.command;
 import ist.meic.pa.Inspector;
 import ist.meic.pa.Navigator;
 
+/*Module to show the current saved objects in the navigator*/
 public class vCommand implements Command {
 
 	@Override

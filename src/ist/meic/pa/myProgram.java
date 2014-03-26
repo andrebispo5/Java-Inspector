@@ -9,7 +9,7 @@ public class myProgram {
 	
 	public static void main(String[] args) {
 		E classE = new E();
-		classE.setC("Hello World!");
+		classE.setC("abc");
 		classE.setD(42);
 		classE.setF(true);
 		classE.setValue(100);

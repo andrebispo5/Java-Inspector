@@ -2,12 +2,19 @@ package ist.meic.pa;
 
 import java.lang.reflect.Field;
 
+/**
+ * The Class TypeValidator.
+ * A simple type validator for the primitive types and strings. Converts the string given by the input to it's respective types
+ * taking in account the representation of the primitive types in java (e.g. a String has to be input between quotation marks). 
+ * Also has method to check if a certain object is a wrapper to a primitive type.
+ */
 public class TypeValidator {
 
+	
 	public Object assignValue(Field f, String val){
 		Class<?> type = f.getType();
 		Object retVal = null;
-		String name = type.getName();
+		String name = type.getSimpleName();
 		if(name.contains("int")){
 			try {
 				retVal = Integer.parseInt(val);
@@ -39,6 +46,8 @@ public class TypeValidator {
 			}
 		}else if(name.contains("long")){
 			try {
+				if(val.endsWith("L"))
+						val=val.substring(0,val.length()-1);
 				retVal = Long.parseLong(val);
 			} catch (NumberFormatException e) {
 				System.err.println("Insert an long value.");
@@ -51,10 +60,10 @@ public class TypeValidator {
 			}
 		}else if(name.contains("String")){
 			retVal = val;
-		}else if(name.matches("char[]")){
+		}else if(name.contains("char[]")){
 			retVal=val.toCharArray();
 		}else if(name.matches("char")){
-			retVal=val.charAt(0);
+			retVal=val.charAt(1);
 		}
 		else{
 			System.err.println("Incompatible type to assign field! ");

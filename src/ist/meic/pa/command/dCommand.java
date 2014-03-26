@@ -3,6 +3,7 @@ package ist.meic.pa.command;
 import ist.meic.pa.Inspector;
 import ist.meic.pa.Navigator;
 
+/*Module for represent the inspection details of current object*/
 public class dCommand implements Command {
 
 	@Override

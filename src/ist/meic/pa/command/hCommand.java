@@ -2,6 +2,7 @@ package ist.meic.pa.command;
 
 import ist.meic.pa.Inspector;
 
+/*Module to provide command list to the user*/
 public class hCommand implements Command {
 
 	@Override
@@ -18,6 +19,7 @@ public class hCommand implements Command {
 		System.err.println("s [identifier] \t\t- saves the current object with [identifier].Called later with @[identifier].");
 		System.err.println("d  \t\t\t- show inspect details of the current object.");
 		System.err.println("d [identifier] \t\t- go to object with [identifier] and show inspect details.");
+		System.err.println("v \t\t\t- shows the saved objects.");
 		System.err.println("----------------------------------------------------------------------------------------------------");
 	}
 
