@@ -141,7 +141,7 @@ public class Navigator {
 	/**
 	 * Computes the Start and End Position of navigation window.
 	 */
-	public int[] getStartEndPositions(){
+	private int[] getStartEndPositions(){
 		int l = objectArray.size();
 		int start = (currentPosition-(WINDOW_NAV_SIZE/2));
 		int end = start + (WINDOW_NAV_SIZE);
