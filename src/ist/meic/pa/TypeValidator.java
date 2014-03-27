@@ -31,20 +31,19 @@ public class TypeValidator {
 				System.err.println("Insert a valid value.");
 				return null;
 			} catch (IllegalAccessException e) {
-				e.printStackTrace();
+				System.err.println("Operation not well Succeeded. Please check correct call.");
 				return null;
 			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
+				System.err.println("Insert a valid value.");
 				return null;
 			} catch (InvocationTargetException e) {
 				System.err.println("Insert a valid value.");
 				return null;
 			} catch (NoSuchMethodException e) {
-				e.printStackTrace();
+				System.err.println("Operation not well Succeeded. Please check correct call.");
 				return null;
 			} catch (SecurityException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.err.println("Operation not well Succeeded. Please check correct call.");
 				return null;
 			}
 			}

@@ -42,10 +42,10 @@ public class iCommand implements Command {
 				if(field!=null)	
 					gadget.inspectObject(field.get(current));
 			} catch (IllegalArgumentException e) {
-				// TODO Auto-generated catch block
+				System.err.println("Please insert correct inspection command.");
 				e.printStackTrace();
 			} catch (IllegalAccessException e) {
-				// TODO Auto-generated catch block
+				System.err.println("Element cannot be accessed.");
 				e.printStackTrace();
 			}
 			
