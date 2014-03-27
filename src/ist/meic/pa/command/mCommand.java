@@ -15,27 +15,34 @@ import java.lang.reflect.Field;
  */
 public class mCommand implements Command {
 
-	
 	@Override
 	public void execute(Inspector gadget, String[] commandList) {
 		Navigator nav = gadget.getNavigator();
 		Object obj = nav.getObject();
 		Class<? extends Object> c = obj.getClass();
 		Field f = null;
+
 		try {
 			String newValue = commandList[2];
 			f = this.getField(obj, c, commandList[1]);
+			Object oldValue = f.get(obj);
 			TypeValidator t = new TypeValidator();
-			if(newValue.startsWith("@")){
-				Object savedObject = nav.getSavedObject(newValue.substring(1,newValue.length()));
+			if (newValue.startsWith("@")) {
+				Object savedObject = nav.getSavedObject(newValue.substring(1,
+						newValue.length()));
 				System.out.println(savedObject);
-				nav.updateExistingObject(f.get(obj), savedObject);
-				f.set(obj,savedObject);
-			}
-			else{
+
+				if (savedObject != null) {
+					f.set(obj, savedObject);
+					nav.updateExistingObject(oldValue, savedObject);
+				}
+			} else {
 				Object fieldValue = t.assignValue(f, newValue);
-				nav.updateExistingObject(f.get(obj),fieldValue);
-				f.set(obj, fieldValue);
+
+				if (fieldValue != null) {
+					f.set(obj, fieldValue);
+					nav.updateExistingObject(oldValue, fieldValue);
+				}
 			}
 		} catch (SecurityException e) {
 			System.err.println("Field cannot be accessed.");
@@ -43,37 +50,40 @@ public class mCommand implements Command {
 			System.err.println("Field not compatible with input.");
 		} catch (IllegalAccessException e) {
 			System.err.println("Field cannot be accessed.");
-		} catch(NullPointerException e){
+		} catch (NullPointerException e) {
 			System.err.println("Field not found.");
-		} catch(ArrayIndexOutOfBoundsException e){
+		} catch (ArrayIndexOutOfBoundsException e) {
 			System.err.println("Value to assign to field not found.");
 		}
 
 	}
-	
-	
+
 	/**
-	 * Gets the field matching the name given by the user.
-	 * If the field is not from the current object, is recursively searches for it in the object's superclasses.
-	 *
-	 * @param obj 		The current selected object
-	 * @param objClass 	The current selected object's class
-	 * @param fieldName The name of the field to modify
+	 * Gets the field matching the name given by the user. If the field is not
+	 * from the current object, is recursively searches for it in the object's
+	 * superclasses.
+	 * 
+	 * @param obj
+	 *            The current selected object
+	 * @param objClass
+	 *            The current selected object's class
+	 * @param fieldName
+	 *            The name of the field to modify
 	 * @return The field with the given name
 	 */
-	public Field getField(Object obj, Class<?> objClass, String fieldName){
+	public Field getField(Object obj, Class<?> objClass, String fieldName) {
 		Field[] fields = objClass.getDeclaredFields();
 		Field wantedField = null;
-		for (int j=0;j<fields.length;j++){
+		for (int j = 0; j < fields.length; j++) {
 			fields[j].setAccessible(true);
 			String fn = fields[j].getName();
 			if (fn.equals(fieldName))
 				wantedField = fields[j];
 		}
-		if(wantedField == null){
+		if (wantedField == null) {
 			Class<?> cl = objClass.getSuperclass();
-			if(cl != null)
-				wantedField = getField(obj,cl,fieldName);
+			if (cl != null)
+				wantedField = getField(obj, cl, fieldName);
 		}
 		return wantedField;
 	}
