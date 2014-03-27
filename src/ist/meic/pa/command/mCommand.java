@@ -6,10 +6,16 @@ import ist.meic.pa.TypeValidator;
 
 import java.lang.reflect.Field;
 
-/*Module to modify fields of inspected objects*/
+
+/**
+ * Module to modify fields of inspected objects.
+ * Receives two arguments: the name of the field to modify and its new value.
+ * This command supports two modes: The user can either choose to modify a field of the current selected object or, if 
+ * the name is preceded by @, to modify a previously saved field.
+ */
 public class mCommand implements Command {
 
-	/*sets the field to modify to the new given value*/
+	
 	@Override
 	public void execute(Inspector gadget, String[] commandList) {
 		Navigator nav = gadget.getNavigator();
@@ -45,7 +51,16 @@ public class mCommand implements Command {
 
 	}
 	
-	/*Gets the field of object given  with the name given*/
+	
+	/**
+	 * Gets the field matching the name given by the user.
+	 * If the field is not from the current object, is recursively searches for it in the object's superclasses.
+	 *
+	 * @param obj 		The current selected object
+	 * @param objClass 	The current selected object's class
+	 * @param fieldName The name of the field to modify
+	 * @return The field with the given name
+	 */
 	public Field getField(Object obj, Class<?> objClass, String fieldName){
 		Field[] fields = objClass.getDeclaredFields();
 		Field wantedField = null;

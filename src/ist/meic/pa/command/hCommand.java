@@ -2,9 +2,13 @@ package ist.meic.pa.command;
 
 import ist.meic.pa.Inspector;
 
-/*Module to provide command list to the user*/
+
+/**
+ * Module to provide the command list to the user.
+ */
 public class hCommand implements Command {
 
+	
 	@Override
 	public void execute(Inspector gadget, String[] commandList) {
 		System.err.println("-----------------------------------------COMMAND HELP-----------------------------------------------");

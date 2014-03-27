@@ -9,12 +9,22 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
-/*Module to call inspection over an object*/
+
+/**
+ * Module to inspect an object.
+ * Inspects a field, given as an argument by the user, of the current object. If the object extends some other class
+ * and that class has a field with the same name as the one specified by the user, this command displays all the fields
+ * with that name and the classes they correspond to and shows the available options to the user. 
+ */
 public class iCommand implements Command {
 	
 	
+	
 	private ArrayList<Field> fieldsList;
+	
+
 	private String options;
+	
 	
 	public iCommand() {
 		this.fieldsList = new ArrayList<Field>();
@@ -22,7 +32,7 @@ public class iCommand implements Command {
 	}
 
 	
-	/*Sets the current object to the one given as argument, inspecting it*/
+	
 	@Override
 	public void execute(Inspector gadget, String[] commandList) {
 			Navigator nav = gadget.getNavigator(); 
@@ -41,7 +51,16 @@ public class iCommand implements Command {
 			
 		}
 
-	/*Returns the field from the current object*/
+	
+	/**
+	 * Gets the available fields. If there is only one field, in the current object and its superclasses, with the name specified
+	 * by the user, it return that field for inspection. If there are more than one field with that name, it displays the 
+	 * options to the user and awaits his choice, returning the chosen field for inspection.
+	 *
+	 * @param commandList 	The command list with the name of the field to inspect
+	 * @param current 		The current selected object
+	 * @return The field to inspect
+	 */
 	private Field getAvailableField(String[] commandList, Object current) {
 		Field field = null;
 		try {
@@ -78,7 +97,17 @@ public class iCommand implements Command {
 		return field;
 	}
 
-	/*Finds all the matching fields with a given name. Used for shadowed fields*/
+	
+	/**
+	 * Recursive function to look in the current object and its superclasses for fields with the name specified by the user.
+	 * With each match an array is updated with the matched fields in order to support shadowed fields.
+	 *
+	 * @param obj 		The current selected object
+	 * @param objClass 	The current selected object's class
+	 * @param fieldName The field name specified by the user
+	 * @throws SecurityException 	Thrown when the field cannot be accessed
+	 * @throws NoSuchFieldException Thrown when there are no fields with the given name
+	 */
 	public void getMatchingFields(Object obj, Class<?> objClass, String fieldName) throws SecurityException, NoSuchFieldException{
 		Field[] fields = objClass.getDeclaredFields();
 		for (int j=0;j<fields.length;j++){
