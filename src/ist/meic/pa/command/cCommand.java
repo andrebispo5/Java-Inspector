@@ -9,16 +9,25 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
-/*Module for implementation of command to call methods*/
+
+/**
+ * Module to support the call of methods of an inspected object.
+ * It receives the name of the method and its arguments, searches for a match and invokes that method, displaying the result
+ * of the invocation to the user.
+ * If the method doesn't exist in the current object, it searches for a match in its superclasses.
+ */
 public class cCommand implements Command {
 
+	
 	private Class<?>[] classArgs;
+	
+	
 	private Object[] args;
+	
+	
 	private final Map<Object[], Method> candidateMethodsMap = new HashMap<Object[], Method>();
 	
-	/*Computes the list of arguments given as string, 
-	 * checks for the possible method to call with the name and arguments given 
-	 * and calls the suitable method*/
+	
 	@Override
 	public void execute(Inspector gadget, String[] commandList) {
 		if (commandList.length < 2){
@@ -54,7 +63,16 @@ public class cCommand implements Command {
 		}
 	}
 
-	/*tries to invoke one of the possible methods*/
+	
+	/**
+	 * Tries to invoke all methods matching the name given by the user until the invocation of one method with the arguments
+	 * given is successful.
+	 *
+	 * @param obj 	The current selected object
+	 * @param m 	The method with the exact match to the arguments given. It's value is null if no exact match was found
+	 * @throws IllegalAccessException 	
+	 * @throws InvocationTargetException 
+	 */
 	private void callMethod(Object obj, Method m)
 			throws IllegalAccessException, InvocationTargetException {
 		if (m==null){
@@ -78,7 +96,15 @@ public class cCommand implements Command {
 		}
 	}
 
-	/*Computes the list of methods assignable to invoke*/
+	
+	/**
+	 * Searches for all methods with the given name and the same number of arguments and saves them as possible candidates
+	 * to be invoked. Searches recursively for the methods in the current object's superclasses.
+	 *
+	 * @param commandList 	A list with the name of the method and the arguments input by the user
+	 * @param c 			The class of the object being searched
+	 * @throws NoSuchMethodException	Thrown if no method is matched to the given name and the number of arguments
+	 */
 	private void candidateMethodsToInvoke(String[] commandList, Class<? extends Object> c)
 			throws NoSuchMethodException {
 		Method[] meths=null;
@@ -96,7 +122,20 @@ public class cCommand implements Command {
 	
 	
 	
-	/*Computes the arguments given as a string to the respective specific objects and classes*/
+	
+	/**
+	 * Computes the input arguments to check what types they correspond to and parses them to their correct type.
+	 *
+	 * @param argArray 	An array with the arguments specified by the user
+	 * @param nav 		The navigation bar used with the inspector
+	 * @throws InstantiationException 
+	 * @throws IllegalAccessException 
+	 * @throws ClassNotFoundException 
+	 * @throws IllegalArgumentException 
+	 * @throws SecurityException 
+	 * @throws InvocationTargetException 
+	 * @throws NoSuchMethodException 
+	 */
 	private void computeAllArgs(String[] argArray, Navigator nav) throws InstantiationException, IllegalAccessException, ClassNotFoundException, IllegalArgumentException, SecurityException, InvocationTargetException, NoSuchMethodException{
 		for (int i=0;i<argArray.length;i++){
 			if(argArray[i].startsWith("\"")){
