@@ -137,39 +137,12 @@ public class cCommand implements Command {
 	 * @throws NoSuchMethodException 
 	 */
 	private void computeAllArgs(String[] argArray, Navigator nav) throws InstantiationException, IllegalAccessException, ClassNotFoundException, IllegalArgumentException, SecurityException, InvocationTargetException, NoSuchMethodException{
+		
+		TypeValidator tv = new TypeValidator();
 		for (int i=0;i<argArray.length;i++){
-			if(argArray[i].startsWith("\"")){
-				classArgs[i]=String.class;
-				args[i] = argArray[i].substring(1,argArray[i].length() -1);
-			}
-			else if(argArray[i].matches("[0-9]+f")){
-				classArgs[i]=float.class;
-				args[i] = Float.parseFloat(argArray[i].substring(0,argArray[i].length()-1));
-			}
-			else if(argArray[i].contains(".")){
-				classArgs[i]=double.class;
-				args[i] = Double.parseDouble(argArray[i]);
-			}
-			else if (argArray[i].matches("true")||argArray[i].matches("false")){
-				classArgs[i]=boolean.class;	
-				args[i] = Boolean.parseBoolean(argArray[i]);
-			}
-			else if(argArray[i].matches("[0-9]*")){
-				classArgs[i]=int.class;
-				args[i] = Integer.parseInt(argArray[i]);
-			}
-			else if(argArray[i].matches("[0-9]+L")){
-				classArgs[i]=long.class;
-				args[i] = Long.parseLong(argArray[i].substring(0,argArray[i].length() -1));
-			}
-			else if(argArray[i].matches("\'[A-Za-z0-9]\'")){
-				classArgs[i]=char.class;
-				args[i] = argArray[i].charAt(1);
-			}
-			else if(argArray[i].matches("@[A-Za-z0-9]+")){
+			if(argArray[i].matches("@[A-Za-z0-9]+")){
 				Object newObj = nav.getSavedObject(argArray[i].substring(1,argArray[i].length()));
 				Class<?> c = newObj.getClass();
-				TypeValidator tv = new TypeValidator();
 				if(tv.isPrimitiveWrapper(c)){
 					try {
 						c = (Class<?>) c.getField("TYPE").get(null);
@@ -179,6 +152,9 @@ public class cCommand implements Command {
 				}
 				classArgs[i]= c;
 				args[i] =newObj;
+			}else{
+				classArgs[i]=tv.createClassWithValue(argArray[i]);
+				args[i] = tv.createObjectWithValue(classArgs[i],argArray[i]);
 			}
 		}
 	}

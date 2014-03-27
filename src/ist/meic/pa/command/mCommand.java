@@ -37,7 +37,7 @@ public class mCommand implements Command {
 					nav.updateExistingObject(oldValue, savedObject);
 				}
 			} else {
-				Object fieldValue = t.assignValue(f, newValue);
+				Object fieldValue = t.createObjectWithValue(f.getType(), newValue);
 
 				if (fieldValue != null) {
 					f.set(obj, fieldValue);
